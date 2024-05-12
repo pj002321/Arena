@@ -14,19 +14,21 @@ namespace Arena.Player
         private CharacterController characterController;
         private NavMeshAgent agent;
         private Camera camera;
+
         public Animator animator;
-        private bool isGrounded = false;
+        public ParticleSystem cursorEffect;
+
+        //private bool isGrounded = false;
         public LayerMask groundLayerMask;
         public float groundCheckDistance = 0.3f;
-        public ParticleSystem cursorEffect;
+
         // Gravity && Drag Setting
         public float gravity = -9.81f;
         public Vector3 drags;
 
-        private Vector3 calcVelocity;
-
         readonly int moveHash = Animator.StringToHash("Move");
         readonly int moveSpeedHash = Animator.StringToHash("MoveSpeed");
+        readonly int fallingHash = Animator.StringToHash("Falling");
         #endregion Variables
 
         // Start is called before the first frame update
@@ -54,7 +56,8 @@ namespace Arena.Player
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 100, groundLayerMask))
                 {
-                    Debug.Log("We hit " + hit.collider.name + " " + hit.point);
+                    agent.SetDestination(hit.point);
+                    //Debug.Log("We hit " + hit.collider.name + " " + hit.point);
                     if (cursorEffect != null)
                     {
                         // Instantiate the click effect
@@ -64,24 +67,33 @@ namespace Arena.Player
                         Destroy(effectInstance.gameObject, 2f);
                     }
                     // Move our player to what we hit
-                    agent.SetDestination(hit.point);
                 }
             }
 
             if (agent.remainingDistance > agent.stoppingDistance)
             {
                 characterController.Move(agent.velocity * Time.deltaTime);
+                animator.SetFloat(moveSpeedHash, agent.velocity.magnitude / agent.speed, .1f, Time.deltaTime);
                 animator.SetBool(moveHash, true);
             }
             else
             {
-                Debug.Log("∏ÿ√„");
-                characterController.Move(Vector3.zero);
-                animator.SetBool(moveHash, false);
+                characterController.Move(agent.velocity * Time.deltaTime);
                 if (!agent.pathPending)
                 {
+                    animator.SetFloat(moveSpeedHash, 0);
+                    animator.SetBool(moveHash, false);
                     agent.ResetPath();
                 }
+            }
+
+            if (agent.isOnOffMeshLink)
+            {
+                animator.SetBool(fallingHash, true);
+            }
+            else
+            {
+                animator.SetBool(fallingHash, false);
             }
         }
 
@@ -90,10 +102,11 @@ namespace Arena.Player
             Vector3 position = agent.nextPosition;
             animator.rootPosition = agent.nextPosition;
             transform.position = position;
+            agent.nextPosition = position;
         }
     }
 
-   
+
 }
 
 
