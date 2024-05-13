@@ -50,6 +50,9 @@ namespace Arena.Characters
             {
                 FaceTarget();
             }
+
+
+            
         }
 
         void FaceTarget()
@@ -59,6 +62,10 @@ namespace Arena.Characters
                 Vector3 direction = (Target.position - transform.position).normalized;
                 Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+            }
+            else
+            {
+                stateMachine.ChangeState<MoveToWayPoint>();
             }
         }
 

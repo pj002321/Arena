@@ -45,6 +45,7 @@ namespace Arena.AI
         {
             attackStateController.enterAttackHandler -= OnEnterAttackState;
             attackStateController.exitAttackHandler -= OnExitAttackState;
+            attackable.CurrentAttackBehaviour.animationIndex = Random.Range(0,3);
         }
 
         public void OnEnterAttackState()

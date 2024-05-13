@@ -15,7 +15,7 @@ namespace Arena.AI
         private CharacterController controller;
         private NavMeshAgent agent;
 
-        private EnemyController_Patrol patrolController;
+        private EnemyController_Range patrolController;
 
         private Transform targetWaypoint = null;
         private int waypointIndex = 0;
@@ -28,7 +28,7 @@ namespace Arena.AI
 
         #region Properties
 
-        private Transform[] Waypoints => ((EnemyController_Patrol)context)?.waypoints;
+        private Transform[] Waypoints => ((EnemyController_Range)context)?.waypoints;
 
         #endregion Properties
 
@@ -38,7 +38,7 @@ namespace Arena.AI
             controller = context.GetComponent<CharacterController>();
             agent = context.GetComponent<NavMeshAgent>();
 
-            patrolController = context as EnemyController_Patrol;
+            patrolController = context as EnemyController_Range;
         }
 
         public override void OnEnter()
@@ -47,6 +47,7 @@ namespace Arena.AI
 
             if (targetWaypoint == null)
             {
+                stateMachine.ChangeState<IdleState>();
                 FindNextWaypoint();
             }
 
@@ -87,7 +88,7 @@ namespace Arena.AI
                 else
                 {
                     controller.Move(agent.velocity * Time.deltaTime);
-                    animator.SetFloat(moveSpeedHash, agent.velocity.magnitude / agent.speed, .1f, Time.deltaTime);
+                    //animator.SetFloat(moveSpeedHash, agent.velocity.magnitude / agent.speed, .1f, Time.deltaTime);
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace Arena.AI
     {
         bool isPatrol = false;
         private float minIdleTime = 0.0f;
-        private float maxIdleTime = 3.0f;
+        private float maxIdleTime = 2.0f;
         private float idleTime = 0.0f;
 
         private Animator animator;
@@ -33,7 +33,7 @@ namespace Arena.AI
             animator.SetFloat(moveSpeedHash, 0);
             controller?.Move(Vector3.zero);
 
-            if (context is EnemyController_Patrol)
+            if (context is EnemyController_Range)
             {
                 isPatrol = true;
                 idleTime = UnityEngine.Random.Range(minIdleTime, maxIdleTime);
@@ -60,6 +60,10 @@ namespace Arena.AI
             else if (isPatrol && stateMachine.ElapsedTimeInState > idleTime)
             {
                 stateMachine.ChangeState<MoveToWayPoint>();
+            }
+            else
+            {
+                stateMachine.ChangeState<IdleState>();
             }
         }
 

@@ -47,13 +47,16 @@ namespace Arena.Characters
 
         #region Unity Methods
 
+        // State Regist
         protected override void Start()
         {
             base.Start();
-
+          
             stateMachine.AddState(new MoveState());
+            stateMachine.AddState(new MoveToWayPoint());
             stateMachine.AddState(new AttackState());
             stateMachine.AddState(new DeadState());
+            stateMachine.AddState(new IdleState());
 
             health = maxHealth;
 
@@ -67,8 +70,6 @@ namespace Arena.Characters
 
             base.Update();
         }
-
-
 
         private void OnAnimatorMove()
         {
@@ -121,6 +122,7 @@ namespace Arena.Characters
                         if ((CurrentAttackBehaviour == null) || (CurrentAttackBehaviour.priority < behaviour.priority))
                         {
                             CurrentAttackBehaviour = behaviour;
+                            
                         }
                     }
                 }

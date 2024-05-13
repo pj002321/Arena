@@ -43,6 +43,7 @@ namespace Arena.Characters
             {
                 calcCoolTime += Time.deltaTime;
             }
+           
         }
 
         public abstract void ExecuteAttack(GameObject target = null, Transform startPoint = null);
