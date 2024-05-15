@@ -1,5 +1,9 @@
+using Arena.AI;
+using Arena.Characters;
+using Arena.Core;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Sprites;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -7,47 +11,71 @@ using UnityEngine.UIElements;
 namespace Arena.Player
 {
     [RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(CharacterController)), RequireComponent(typeof(Animator))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IAttackable, IDamagable
     {
         #region Variables
+        public PlaceTargetWithMouse picker;
 
-        private CharacterController characterController;
+        private CharacterController controller;
+        [SerializeField]
+        private LayerMask groundLayerMask;
+
         private NavMeshAgent agent;
         private Camera camera;
-
-        public Animator animator;
         public ParticleSystem cursorEffect;
-
-        //private bool isGrounded = false;
-        public LayerMask groundLayerMask;
-        public float groundCheckDistance = 0.3f;
-
-        // Gravity && Drag Setting
-        public float gravity = -9.81f;
-        public Vector3 drags;
-
+        [SerializeField]
+        private Animator animator;
+        private float leftoverDist = 0.25f;
         readonly int moveHash = Animator.StringToHash("Move");
         readonly int moveSpeedHash = Animator.StringToHash("MoveSpeed");
         readonly int fallingHash = Animator.StringToHash("Falling");
+        readonly int attackTriggerHash = Animator.StringToHash("AttackTrigger");
+        readonly int attackIndexHash = Animator.StringToHash("AttackIndex");
+        readonly int hitTriggerHash = Animator.StringToHash("HitTrigger");
+        readonly int isAliveHash = Animator.StringToHash("IsAlive");
+
+        [SerializeField]
+        private LayerMask targetMask;
+        public Transform target;
+
+        public bool IsInAttackState => GetComponent<AttackStateController>()?.IsInAttackState ?? false;
+
+        [SerializeField]
+        private Transform hitPoint;
+
+        public float maxHealth = 100f;
+        protected float health;
+
         #endregion Variables
 
         // Start is called before the first frame update
         void Start()
         {
-            characterController = GetComponent<CharacterController>();
-            agent = GetComponent<NavMeshAgent>();
-            animator = GetComponent<Animator>();
+            controller = GetComponent<CharacterController>();
 
-            agent.updatePosition = false; // agent 이동 시스템을 사용하지 않는다.
+            agent = GetComponent<NavMeshAgent>();
+            agent.updatePosition = false;
             agent.updateRotation = true;
+
             camera = Camera.main;
+
+            health = maxHealth;
+
+            InitAttackBehaviour();
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (!IsAlive)
+            {
+                return;
+            }
+
+            CheckAttackBehaviour();
+
             // Process mouse left button input
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(1))
             {
                 // Make ray from screen to world
                 Ray ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -56,44 +84,54 @@ namespace Arena.Player
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 100, groundLayerMask))
                 {
+                    Debug.Log("We hit " + hit.collider.name + " " + hit.point);
+                    RemoveTarget();
+                    // Move our player to what we hit
                     agent.SetDestination(hit.point);
-                    //Debug.Log("We hit " + hit.collider.name + " " + hit.point);
                     if (cursorEffect != null)
                     {
-                        // Instantiate the click effect
                         ParticleSystem effectInstance = Instantiate(cursorEffect, hit.point += new Vector3(0, 0.3f, 0), hit.collider.transform.rotation);
-
-                        // Destroy the instantiated effect after 2 seconds
                         Destroy(effectInstance.gameObject, 2f);
                     }
-                    // Move our player to what we hit
+                    if (picker)
+                    {
+                        picker.SetPosition(hit);
+                    }
+                }
+            }
+        
+
+            if (target != null)
+            {
+                if (!(target.GetComponent<IDamagable>()?.IsAlive ?? false))
+                {
+                    RemoveTarget();
+                }
+                else
+                {
+                    agent.SetDestination(target.position);
+                    FaceToTarget();
                 }
             }
 
-            if (agent.remainingDistance > agent.stoppingDistance)
+            if ((agent.remainingDistance > agent.stoppingDistance + leftoverDist))
             {
-                characterController.Move(agent.velocity * Time.deltaTime);
-                animator.SetFloat(moveSpeedHash, agent.velocity.magnitude / agent.speed, .1f, Time.deltaTime);
+                controller.Move(agent.velocity * Time.deltaTime);
                 animator.SetBool(moveHash, true);
             }
             else
             {
-                characterController.Move(agent.velocity * Time.deltaTime);
                 if (!agent.pathPending)
                 {
-                    animator.SetFloat(moveSpeedHash, 0);
                     animator.SetBool(moveHash, false);
                     agent.ResetPath();
                 }
             }
 
-            if (agent.isOnOffMeshLink)
+            //calcAttackCoolTime += Time.deltaTime;
+            if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                animator.SetBool(fallingHash, true);
-            }
-            else
-            {
-                animator.SetBool(fallingHash, false);
+                AttackTarget();
             }
         }
 
@@ -104,6 +142,133 @@ namespace Arena.Player
             transform.position = position;
             agent.nextPosition = position;
         }
+        #region Helper Methods
+        private void InitAttackBehaviour()
+        {
+            foreach (AttackBehaviour behaviour in attackBehaviours)
+            {
+                behaviour.targetMask = targetMask;
+            }
+        }
+
+        private void CheckAttackBehaviour()
+        {
+            if (CurrentAttackBehaviour == null || !CurrentAttackBehaviour.IsAvailable)
+            {
+                CurrentAttackBehaviour = null;
+
+                foreach (AttackBehaviour behaviour in attackBehaviours)
+                {
+                    if (behaviour.IsAvailable)
+                    {
+                        if ((CurrentAttackBehaviour == null) || (CurrentAttackBehaviour.priority < behaviour.priority))
+                        {
+                            CurrentAttackBehaviour = behaviour;
+                        }
+                    }
+                }
+            }
+        }
+
+        void SetTarget(Transform newTarget)
+        {
+            target = newTarget;
+
+            //agent.stoppingDistance = CurrentAttackBehaviour?.range ?? 0;
+            //agent.updateRotation = false;
+            //agent.SetDestination(newTarget.transform.position);
+        }
+
+        void RemoveTarget()
+        {
+            target = null;
+            agent.stoppingDistance = 0f;
+            agent.updateRotation = true;
+            agent.ResetPath();
+        }
+
+        void AttackTarget()
+        {
+            animator.SetInteger(attackIndexHash, CurrentAttackBehaviour.animationIndex);
+            animator.SetTrigger(attackTriggerHash);
+            CurrentAttackBehaviour.animationIndex = Random.Range(0, 3);
+            if (CurrentAttackBehaviour == null)
+            {
+                return;
+            }
+
+            if (target != null && !IsInAttackState && CurrentAttackBehaviour.IsAvailable)
+            {
+                float distance = Vector3.Distance(transform.position, target.transform.position);
+                if (distance <= CurrentAttackBehaviour?.range)
+                {
+                    CurrentAttackBehaviour.animationIndex= Random.Range(0, 3);  
+                    //calcAttackCoolTime = 0.0f;
+                }
+            }
+        }
+
+        void FaceToTarget()
+        {
+            if (target)
+            {
+                Vector3 direction = (target.transform.position - transform.position).normalized;
+                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10.0f);
+            }
+        }
+
+        #endregion Helper Methods
+
+        #region IAttackable Interfaces
+        [SerializeField]
+        private List<AttackBehaviour> attackBehaviours = new List<AttackBehaviour>();
+
+        public AttackBehaviour CurrentAttackBehaviour
+        {
+            get;
+            private set;
+        }
+
+        public void OnExecuteAttack(int attackIndex)
+        {
+            if (CurrentAttackBehaviour != null)
+            {
+                CurrentAttackBehaviour.ExecuteAttack(target.gameObject);
+            }
+        }
+
+        #endregion IAttackable Interfaces
+
+        #region IDamagable Interfaces
+
+        public bool IsAlive => health > 0;
+
+        public void TakeDamage(int damage, GameObject damageEffectPrefab)
+        {
+            if (!IsAlive)
+            {
+                return;
+            }
+
+            health -= damage;
+
+            if (damageEffectPrefab)
+            {
+                Instantiate<GameObject>(damageEffectPrefab, hitPoint);
+            }
+
+            if (IsAlive)
+            {
+                animator?.SetTrigger(hitTriggerHash);
+            }
+            else
+            {
+                animator?.SetBool(isAliveHash, false);
+            }
+        }
+
+        #endregion IDamagable Interfaces
     }
 
 

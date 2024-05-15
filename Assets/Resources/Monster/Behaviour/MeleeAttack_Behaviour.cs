@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMelee_Behaviour : AttackBehaviour
+public class MeleeAttack_Behaviour : AttackBehaviour
 {
     public ManualCollision attackCollision;
 
