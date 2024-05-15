@@ -31,10 +31,8 @@ namespace Arena.Characters
         #region Proeprties
         public override bool IsAvailableAttack
         {
-            get
-            {
-                if (!Target)
-                {
+            get {
+                if (!Target) {
                     return false;
                 }
 
@@ -74,16 +72,16 @@ namespace Arena.Characters
         private void OnAnimatorMove()
         {
             // Follow NavMeshAgent
-            Vector3 position = agent.nextPosition;
-            animator.rootPosition = agent.nextPosition;
-            transform.position = position;
+            //Vector3 position = agent.nextPosition;
+            //animator.rootPosition = agent.nextPosition;
+            //transform.position = position;
 
             // Follow CharacterController
-            //Vector3 position = transform.position;
-            //position.y = agent.nextPosition.y;
+            Vector3 position = transform.position;
+            position.y = agent.nextPosition.y;
 
-            //animator.rootPosition = position;
-            //agent.nextPosition = position;
+            animator.rootPosition = position;
+            agent.nextPosition = position;
 
             // Follow RootAnimation
             //Vector3 position = animator.rootPosition;
@@ -96,12 +94,9 @@ namespace Arena.Characters
         #endregion Unity Methods
 
         #region Helper Methods
-        private void InitAttackBehaviour()
-        {
-            foreach (AttackBehaviour behaviour in attackBehaviours)
-            {
-                if (CurrentAttackBehaviour == null)
-                {
+        private void InitAttackBehaviour() {
+            foreach (AttackBehaviour behaviour in attackBehaviours) {
+                if (CurrentAttackBehaviour == null) {
                     CurrentAttackBehaviour = behaviour;
                 }
 
@@ -111,16 +106,12 @@ namespace Arena.Characters
 
         private void CheckAttackBehaviour()
         {
-            if (CurrentAttackBehaviour == null || !CurrentAttackBehaviour.IsAvailable)
-            {
+            if (CurrentAttackBehaviour == null || !CurrentAttackBehaviour.IsAvailable) {
                 CurrentAttackBehaviour = null;
 
-                foreach (AttackBehaviour behaviour in attackBehaviours)
-                {
-                    if (behaviour.IsAvailable)
-                    {
-                        if ((CurrentAttackBehaviour == null) || (CurrentAttackBehaviour.priority < behaviour.priority))
-                        {
+                foreach (AttackBehaviour behaviour in attackBehaviours) {
+                    if (behaviour.IsAvailable) {
+                        if ((CurrentAttackBehaviour == null) || (CurrentAttackBehaviour.priority < behaviour.priority)) {
                             CurrentAttackBehaviour = behaviour;
                             
                         }
@@ -137,24 +128,20 @@ namespace Arena.Characters
 
         public void TakeDamage(int damage, GameObject hitEffectPrefab)
         {
-            if (!IsAlive)
-            {
+            if (!IsAlive) {
                 return;
             }
 
             health -= damage;
 
-            if (hitEffectPrefab)
-            {
+            if (hitEffectPrefab) {
                 Instantiate(hitEffectPrefab, hitPoint);
             }
 
-            if (IsAlive)
-            {
+            if (IsAlive) {
                 animator?.SetTrigger(hitTriggerHash);
             }
-            else
-            {
+            else {
                 stateMachine.ChangeState<DeadState>();
             }
         }
@@ -175,8 +162,7 @@ namespace Arena.Characters
 
         public void OnExecuteAttack(int attackIndex)
         {
-            if (CurrentAttackBehaviour != null && Target != null)
-            {
+            if (CurrentAttackBehaviour != null && Target != null) {
                 CurrentAttackBehaviour.ExecuteAttack(Target.gameObject, projectilePoint);
             }
         }

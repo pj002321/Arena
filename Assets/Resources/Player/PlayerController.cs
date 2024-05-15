@@ -23,9 +23,12 @@ namespace Arena.Player
         private NavMeshAgent agent;
         private Camera camera;
         public ParticleSystem cursorEffect;
+
         [SerializeField]
         private Animator animator;
-        private float leftoverDist = 0.25f;
+
+        private float leftoverDist = 1.5f;
+        
         readonly int moveHash = Animator.StringToHash("Move");
         readonly int moveSpeedHash = Animator.StringToHash("MoveSpeed");
         readonly int fallingHash = Animator.StringToHash("Falling");
@@ -74,28 +77,29 @@ namespace Arena.Player
 
             CheckAttackBehaviour();
 
+            //calcAttackCoolTime += Time.deltaTime;
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                AttackTarget();
+            }
             // Process mouse left button input
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1) /*&& !IsInAttackState*/)
             {
                 // Make ray from screen to world
                 Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 
                 // Check hit from ray
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100, groundLayerMask))
-                {
+                if (Physics.Raycast(ray, out hit, 100, groundLayerMask)) {
                     Debug.Log("We hit " + hit.collider.name + " " + hit.point);
                     RemoveTarget();
-                    // Move our player to what we hit
                     agent.SetDestination(hit.point);
-                    if (cursorEffect != null)
-                    {
+                    if (picker) {
+                        picker.SetPosition(hit);
+                    }
+                    if (cursorEffect != null) {
                         ParticleSystem effectInstance = Instantiate(cursorEffect, hit.point += new Vector3(0, 0.3f, 0), hit.collider.transform.rotation);
                         Destroy(effectInstance.gameObject, 2f);
-                    }
-                    if (picker)
-                    {
-                        picker.SetPosition(hit);
                     }
                 }
             }
@@ -121,6 +125,8 @@ namespace Arena.Player
             }
             else
             {
+                //controller.Move(agent.velocity * Time.deltaTime);
+
                 if (!agent.pathPending)
                 {
                     animator.SetBool(moveHash, false);
@@ -128,20 +134,17 @@ namespace Arena.Player
                 }
             }
 
-            //calcAttackCoolTime += Time.deltaTime;
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                AttackTarget();
-            }
         }
 
         private void OnAnimatorMove()
         {
-            Vector3 position = agent.nextPosition;
-            animator.rootPosition = agent.nextPosition;
-            transform.position = position;
+            Vector3 position = transform.position;
+            position.y = agent.nextPosition.y;
+
+            animator.rootPosition = position;
             agent.nextPosition = position;
         }
+
         #region Helper Methods
         private void InitAttackBehaviour()
         {
@@ -192,6 +195,7 @@ namespace Arena.Player
             animator.SetInteger(attackIndexHash, CurrentAttackBehaviour.animationIndex);
             animator.SetTrigger(attackTriggerHash);
             CurrentAttackBehaviour.animationIndex = Random.Range(0, 3);
+
             if (CurrentAttackBehaviour == null)
             {
                 return;
@@ -202,8 +206,7 @@ namespace Arena.Player
                 float distance = Vector3.Distance(transform.position, target.transform.position);
                 if (distance <= CurrentAttackBehaviour?.range)
                 {
-                    CurrentAttackBehaviour.animationIndex= Random.Range(0, 3);  
-                    //calcAttackCoolTime = 0.0f;
+                    controller.Move(Vector3.zero);
                 }
             }
         }
@@ -214,7 +217,7 @@ namespace Arena.Player
             {
                 Vector3 direction = (target.transform.position - transform.position).normalized;
                 Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10.0f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 20.0f);
             }
         }
 

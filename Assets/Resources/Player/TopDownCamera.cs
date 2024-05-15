@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 namespace Arena.Cameras
 {
-    public class TopDownCamera : MonoBehaviour
+    public class TopDownCamera : BaseCamera
     {
         #region Variables
 
@@ -15,29 +15,19 @@ namespace Arena.Cameras
         public float lookAtHeight = 2f;
         public float smoothSpeed = 0.5f;
 
-        public Transform target;
+ 
         private Vector3 refVelocity;
         #endregion
 
         #region Main Methods
-        void Start()
-        {
-            HandleCamera();
-        }
-
-        private void LateUpdate()
-        {
-            HandleCamera();
-        }
         #endregion
 
         #region Helper Methods
         [SerializeField]
-        public void HandleCamera()
+        public override void HandleCamera()
         {
             if (!target)
             {
-                Debug.LogError("Null Target");
                 return;
             }
 
