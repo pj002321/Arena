@@ -27,7 +27,7 @@ namespace Arena.Player
         [SerializeField]
         private Animator animator;
 
-        private float leftoverDist = 1.5f;
+        private float leftoverDist = 1.0f;
         
         readonly int moveHash = Animator.StringToHash("Move");
         readonly int moveSpeedHash = Animator.StringToHash("MoveSpeed");
@@ -138,11 +138,9 @@ namespace Arena.Player
 
         private void OnAnimatorMove()
         {
-            Vector3 position = transform.position;
-            position.y = agent.nextPosition.y;
-
-            animator.rootPosition = position;
-            agent.nextPosition = position;
+            Vector3 position = agent.nextPosition;
+            animator.rootPosition = agent.nextPosition;
+            transform.position = position;
         }
 
         #region Helper Methods

@@ -58,7 +58,6 @@ namespace Arena.Characters
 
             health = maxHealth;
 
-         
             InitAttackBehaviour();
         }
 
@@ -77,18 +76,18 @@ namespace Arena.Characters
             //transform.position = position;
 
             // Follow CharacterController
-            Vector3 position = transform.position;
-            position.y = agent.nextPosition.y;
-
-            animator.rootPosition = position;
-            agent.nextPosition = position;
-
-            // Follow RootAnimation
-            //Vector3 position = animator.rootPosition;
+            //Vector3 position = transform.position;
             //position.y = agent.nextPosition.y;
 
+            //animator.rootPosition = position;
             //agent.nextPosition = position;
-            //transform.position = position;
+
+            // Follow RootAnimation
+            Vector3 position = animator.rootPosition;
+            position.y = agent.nextPosition.y;
+
+            agent.nextPosition = position;
+            transform.position = position;
         }
 
         #endregion Unity Methods

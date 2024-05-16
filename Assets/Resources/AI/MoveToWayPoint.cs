@@ -43,11 +43,10 @@ namespace Arena.AI
 
         public override void OnEnter()
         {
-            agent.stoppingDistance = 0.0f;
+            //agent.stoppingDistance = 0.0f;
 
             if (targetWaypoint == null)
             {
-                stateMachine.ChangeState<IdleState>();
                 FindNextWaypoint();
             }
 
@@ -58,6 +57,7 @@ namespace Arena.AI
             }
             else
             {
+                animator?.SetBool(isMoveHash, false);
                 stateMachine.ChangeState<IdleState>();
             }
         }
@@ -79,16 +79,14 @@ namespace Arena.AI
             }
             else
             {
-
+                stateMachine.ChangeState<IdleState>();
                 if (!agent.pathPending && (agent.remainingDistance <= agent.stoppingDistance))
                 {
                     FindNextWaypoint();
-                    stateMachine.ChangeState<IdleState>();
                 }
                 else
                 {
                     controller.Move(agent.velocity * Time.deltaTime);
-                    //animator.SetFloat(moveSpeedHash, agent.velocity.magnitude / agent.speed, .1f, Time.deltaTime);
                 }
             }
         }

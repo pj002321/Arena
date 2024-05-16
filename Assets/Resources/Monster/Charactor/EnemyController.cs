@@ -46,13 +46,10 @@ namespace Arena.Characters
         protected virtual void Update()
         {
             stateMachine.Update(Time.deltaTime);
-            if (!(stateMachine.CurrentState is MoveState) && !(stateMachine.CurrentState is DeadState))
+            if (!(stateMachine.CurrentState is DeadState))
             {
                 FaceTarget();
             }
-
-
-            
         }
 
         void FaceTarget()
@@ -61,12 +58,13 @@ namespace Arena.Characters
             {
                 Vector3 direction = (Target.position - transform.position).normalized;
                 Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
             }
             else
             {
                 stateMachine.ChangeState<MoveToWayPoint>();
             }
+
         }
 
         private void OnAnimatorMove()
@@ -77,18 +75,18 @@ namespace Arena.Characters
             //transform.position = position;
 
             // Follow CharacterController
-            Vector3 position = transform.position;
-            position.y = agent.nextPosition.y;
-
-            animator.rootPosition = position;
-            agent.nextPosition = position;
-
-            // Follow RootAnimation
-            //Vector3 position = animator.rootPosition;
+            //Vector3 position = transform.position;
             //position.y = agent.nextPosition.y;
 
+            //animator.rootPosition = position;
             //agent.nextPosition = position;
-            //transform.position = position;
+
+            // Follow RootAnimation
+            Vector3 position = animator.rootPosition;
+            position.y = agent.nextPosition.y;
+
+            agent.nextPosition = position;
+            transform.position = position;
         }
         #endregion Unity Methods
 
