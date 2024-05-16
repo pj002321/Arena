@@ -59,7 +59,7 @@ namespace Arena.AI
             }
             else if (isPatrol && stateMachine.ElapsedTimeInState > idleTime)
             {
-                stateMachine.ChangeState<MoveToWayPoint>();
+                stateMachine.ChangeState<IdleState>();
             }
             else
             {

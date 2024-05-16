@@ -23,6 +23,7 @@ namespace Arena.Player
         private NavMeshAgent agent;
         private Camera camera;
         public ParticleSystem cursorEffect;
+        public ParticleSystem TrailEffect;
 
         [SerializeField]
         private Animator animator;
@@ -40,6 +41,7 @@ namespace Arena.Player
         [SerializeField]
         private LayerMask targetMask;
         public Transform target;
+        public Transform Trail;
 
         public bool IsInAttackState => GetComponent<AttackStateController>()?.IsInAttackState ?? false;
 
@@ -80,8 +82,11 @@ namespace Arena.Player
             //calcAttackCoolTime += Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
+                controller.Move(Vector3.zero);
                 AttackTarget();
             }
+           
+
             // Process mouse left button input
             if (Input.GetMouseButtonDown(1) /*&& !IsInAttackState*/)
             {
@@ -190,9 +195,11 @@ namespace Arena.Player
 
         void AttackTarget()
         {
+            
             animator.SetInteger(attackIndexHash, CurrentAttackBehaviour.animationIndex);
             animator.SetTrigger(attackTriggerHash);
             CurrentAttackBehaviour.animationIndex = Random.Range(0, 3);
+           
 
             if (CurrentAttackBehaviour == null)
             {

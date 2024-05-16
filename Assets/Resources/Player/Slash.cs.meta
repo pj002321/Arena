@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 9a31211d1dfb9a94a9b2262390a68eb0
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - TrailEffect: {fileID: 7941843081344213273, guid: 366d2037da460e6409ec858a3c278992, type: 3}
+  - Trail: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

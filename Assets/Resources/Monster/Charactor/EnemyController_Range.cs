@@ -32,6 +32,7 @@ namespace Arena.Characters
         public override bool IsAvailableAttack
         {
             get {
+
                 if (!Target) {
                     return false;
                 }
