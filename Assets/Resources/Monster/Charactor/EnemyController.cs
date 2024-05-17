@@ -1,4 +1,5 @@
 using Arena.AI;
+using Arena.Audiosystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,6 @@ namespace Arena.Characters
 
         protected NavMeshAgent agent;
         protected Animator animator;
-
         private FieldOfView fieldOfView;
 
         #endregion Variables
@@ -31,12 +31,11 @@ namespace Arena.Characters
         // Start is called before the first frame update
         protected virtual void Start()
         {
+          
             stateMachine = new StateMachine<EnemyController>(this, new IdleState());
-
             agent = GetComponent<NavMeshAgent>();
             agent.updatePosition = false;
             agent.updateRotation = true;
-
             animator = GetComponent<Animator>();
             fieldOfView = GetComponent<FieldOfView>();
         }
@@ -51,11 +50,12 @@ namespace Arena.Characters
                 FaceTarget();
             }
         }
-
+        
         void FaceTarget()
         {
             if (Target)
             {
+                
                 Vector3 direction = (Target.position - transform.position).normalized;
                 Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
@@ -95,5 +95,6 @@ namespace Arena.Characters
         }
 
         #endregion Helper Methods
+
     }
 }

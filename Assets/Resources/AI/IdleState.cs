@@ -26,12 +26,13 @@ namespace Arena.AI
             animator = context.GetComponent<Animator>();
             controller = context.GetComponent<CharacterController>();
         }
-
+      
         public override void OnEnter()
         {
             animator?.SetBool(isMoveHash, false);
             animator.SetFloat(moveSpeedHash, 0);
             controller?.Move(Vector3.zero);
+    
 
             if (context is EnemyController_Range)
             {

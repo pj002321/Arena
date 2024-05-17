@@ -25,7 +25,6 @@ namespace Arena.Characters
 
         [SerializeField]
         private Transform projectilePoint;
-
         #endregion Variables
 
         #region Proeprties
@@ -36,7 +35,6 @@ namespace Arena.Characters
                 if (!Target) {
                     return false;
                 }
-
                 float distance = Vector3.Distance(transform.position, Target.position);
                 return (distance <= AttackRange);
             }
@@ -71,19 +69,6 @@ namespace Arena.Characters
 
         private void OnAnimatorMove()
         {
-            // Follow NavMeshAgent
-            //Vector3 position = agent.nextPosition;
-            //animator.rootPosition = agent.nextPosition;
-            //transform.position = position;
-
-            // Follow CharacterController
-            //Vector3 position = transform.position;
-            //position.y = agent.nextPosition.y;
-
-            //animator.rootPosition = position;
-            //agent.nextPosition = position;
-
-            // Follow RootAnimation
             Vector3 position = animator.rootPosition;
             position.y = agent.nextPosition.y;
 
@@ -95,6 +80,7 @@ namespace Arena.Characters
 
         #region Helper Methods
         private void InitAttackBehaviour() {
+            
             foreach (AttackBehaviour behaviour in attackBehaviours) {
                 if (CurrentAttackBehaviour == null) {
                     CurrentAttackBehaviour = behaviour;
@@ -112,6 +98,7 @@ namespace Arena.Characters
                 foreach (AttackBehaviour behaviour in attackBehaviours) {
                     if (behaviour.IsAvailable) {
                         if ((CurrentAttackBehaviour == null) || (CurrentAttackBehaviour.priority < behaviour.priority)) {
+                           
                             CurrentAttackBehaviour = behaviour;
                             
                         }
@@ -163,6 +150,7 @@ namespace Arena.Characters
         public void OnExecuteAttack(int attackIndex)
         {
             if (CurrentAttackBehaviour != null && Target != null) {
+
                 CurrentAttackBehaviour.ExecuteAttack(Target.gameObject, projectilePoint);
             }
         }
