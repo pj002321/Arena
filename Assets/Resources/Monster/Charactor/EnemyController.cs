@@ -65,23 +65,8 @@ namespace Arena.Characters
 
         private void OnAnimatorMove()
         {
-            // Follow NavMeshAgent
-            //Vector3 position = agent.nextPosition;
-            //animator.rootPosition = agent.nextPosition;
-            //transform.position = position;
-
-            // Follow CharacterController
-            //Vector3 position = transform.position;
-            //position.y = agent.nextPosition.y;
-
-            //animator.rootPosition = position;
-            //agent.nextPosition = position;
-
-            // Follow RootAnimation
-            Vector3 position = animator.rootPosition;
-            position.y = agent.nextPosition.y;
-
-            agent.nextPosition = position;
+            Vector3 position = agent.nextPosition;
+            animator.rootPosition = agent.nextPosition;
             transform.position = position;
         }
         #endregion Unity Methods

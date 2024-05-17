@@ -69,10 +69,8 @@ namespace Arena.Characters
 
         private void OnAnimatorMove()
         {
-            Vector3 position = animator.rootPosition;
-            position.y = agent.nextPosition.y;
-
-            agent.nextPosition = position;
+            Vector3 position = agent.nextPosition;
+            animator.rootPosition = agent.nextPosition;
             transform.position = position;
         }
 
@@ -115,6 +113,8 @@ namespace Arena.Characters
 
         public void TakeDamage(int damage, GameObject hitEffectPrefab)
         {
+            Debug.Log("Hit Damage!" + health);
+
             if (!IsAlive) {
                 return;
             }

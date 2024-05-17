@@ -53,6 +53,7 @@ namespace Arena.Player
 
         #endregion Variables
 
+        #region Unity Methods
         // Start is called before the first frame update
         void Start()
         {
@@ -82,10 +83,11 @@ namespace Arena.Player
             //calcAttackCoolTime += Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
+                RemoveTarget();
                 controller.Move(Vector3.zero);
                 AttackTarget();
             }
-           
+      
 
             // Process mouse left button input
             if (Input.GetMouseButtonDown(1) /*&& !IsInAttackState*/)
@@ -130,7 +132,7 @@ namespace Arena.Player
             }
             else
             {
-                //controller.Move(agent.velocity * Time.deltaTime);
+                controller.Move(Vector3.zero);
 
                 if (!agent.pathPending)
                 {
@@ -142,12 +144,13 @@ namespace Arena.Player
         }
 
         private void OnAnimatorMove()
-        {
+        {   
             Vector3 position = agent.nextPosition;
             animator.rootPosition = agent.nextPosition;
             transform.position = position;
         }
 
+        #endregion Unity Methods
         #region Helper Methods
         private void InitAttackBehaviour()
         {
@@ -175,7 +178,22 @@ namespace Arena.Player
                 }
             }
         }
+        void AttacktoDamageCheck()
+        {
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, 15, targetMask);
 
+            foreach (var hitCollider in hitColliders)
+            {
+                IDamagable damagable = hitCollider.GetComponent<IDamagable>();
+                if (damagable != null && damagable.IsAlive)
+                {
+                    SetTarget(hitCollider.transform);
+                    picker.target = hitCollider.transform;
+                    damagable.TakeDamage(10,null);
+                }
+            }
+    
+        }
         void SetTarget(Transform newTarget)
         {
             target = newTarget;
@@ -195,12 +213,9 @@ namespace Arena.Player
 
         void AttackTarget()
         {
-            
             animator.SetInteger(attackIndexHash, CurrentAttackBehaviour.animationIndex);
             animator.SetTrigger(attackTriggerHash);
             CurrentAttackBehaviour.animationIndex = Random.Range(0, 3);
-           
-
             if (CurrentAttackBehaviour == null)
             {
                 return;
@@ -211,11 +226,13 @@ namespace Arena.Player
                 float distance = Vector3.Distance(transform.position, target.transform.position);
                 if (distance <= CurrentAttackBehaviour?.range)
                 {
-                    controller.Move(Vector3.zero);
+             
+                
+
                 }
             }
         }
-
+       
         void FaceToTarget()
         {
             if (target)

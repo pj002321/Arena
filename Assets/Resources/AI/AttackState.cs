@@ -50,12 +50,12 @@ namespace Arena.AI
 
         public void OnEnterAttackState()
         {
-            UnityEngine.Debug.Log("OnEnterAttackState()");
+          
         }
 
         public void OnExitAttackState()
         {
-            UnityEngine.Debug.Log("OnExitAttackState()");
+         
             stateMachine.ChangeState<IdleState>();
         }
     }
