@@ -4,6 +4,7 @@ using Arena.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor.Sprites;
 
 
 namespace Arena.Characters
@@ -17,6 +18,7 @@ namespace Arena.Characters
         public Transform[] waypoints;
 
         public override float AttackRange => CurrentAttackBehaviour?.range ?? 6.0f;
+
 
         public float maxHealth => 100f;
         private float health;
@@ -98,7 +100,6 @@ namespace Arena.Characters
                         if ((CurrentAttackBehaviour == null) || (CurrentAttackBehaviour.priority < behaviour.priority)) {
                            
                             CurrentAttackBehaviour = behaviour;
-                            
                         }
                     }
                 }
@@ -150,11 +151,10 @@ namespace Arena.Characters
         public void OnExecuteAttack(int attackIndex)
         {
             if (CurrentAttackBehaviour != null && Target != null) {
-
-                CurrentAttackBehaviour.ExecuteAttack(Target.gameObject, projectilePoint);
+                CurrentAttackBehaviour.ExecuteAttack(Target.gameObject);
             }
         }
-
+        
         #endregion IAttackable Interfaces
     }
 }

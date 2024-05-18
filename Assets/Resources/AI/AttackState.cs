@@ -2,6 +2,7 @@ using Arena.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace Arena.AI
 {
@@ -10,7 +11,6 @@ namespace Arena.AI
         private Animator animator;
         private AttackStateController attackStateController;
         private IAttackable attackable;
-
         protected int attackTriggerHash = Animator.StringToHash("AttackTrigger");
         protected int attackIndexHash = Animator.StringToHash("AttackIndex");
 
@@ -28,13 +28,14 @@ namespace Arena.AI
                 stateMachine.ChangeState<IdleState>();
                 return;
             }
-
-
+            attackable.CurrentAttackBehaviour.animationIndex = Random.Range(0, 3);
             attackStateController.enterAttackHandler += OnEnterAttackState;
             attackStateController.exitAttackHandler += OnExitAttackState;
 
             animator?.SetInteger(attackIndexHash, attackable.CurrentAttackBehaviour.animationIndex);
             animator?.SetTrigger(attackTriggerHash);
+       
+            attackStateController.OnCheckAttackCollider(attackable.CurrentAttackBehaviour.animationIndex);
         }
 
         public override void Update(float deltaTime)
@@ -45,17 +46,17 @@ namespace Arena.AI
         {
             attackStateController.enterAttackHandler -= OnEnterAttackState;
             attackStateController.exitAttackHandler -= OnExitAttackState;
-            attackable.CurrentAttackBehaviour.animationIndex = Random.Range(0,3);
+            
+
         }
 
         public void OnEnterAttackState()
         {
-          
+       
         }
 
         public void OnExitAttackState()
         {
-         
             stateMachine.ChangeState<IdleState>();
         }
     }

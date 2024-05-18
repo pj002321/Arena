@@ -3,10 +3,8 @@ using Arena.Characters;
 using Arena.Core;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Sprites;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 namespace Arena.Player
 {
@@ -29,7 +27,7 @@ namespace Arena.Player
         private Animator animator;
 
         private float leftoverDist = 1.0f;
-        
+
         readonly int moveHash = Animator.StringToHash("Move");
         readonly int moveSpeedHash = Animator.StringToHash("MoveSpeed");
         readonly int fallingHash = Animator.StringToHash("Falling");
@@ -83,12 +81,10 @@ namespace Arena.Player
             //calcAttackCoolTime += Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                RemoveTarget();
                 controller.Move(Vector3.zero);
                 AttackTarget();
+                RemoveTarget();
             }
-      
-
             // Process mouse left button input
             if (Input.GetMouseButtonDown(1) /*&& !IsInAttackState*/)
             {
@@ -97,20 +93,23 @@ namespace Arena.Player
 
                 // Check hit from ray
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100, groundLayerMask)) {
-                    Debug.Log("We hit " + hit.collider.name + " " + hit.point);
+                if (Physics.Raycast(ray, out hit, 100, groundLayerMask))
+                {
+                    //Debug.Log("We hit " + hit.collider.name + " " + hit.point);
                     RemoveTarget();
                     agent.SetDestination(hit.point);
-                    if (picker) {
+                    if (picker)
+                    {
                         picker.SetPosition(hit);
                     }
-                    if (cursorEffect != null) {
+                    if (cursorEffect != null)
+                    {
                         ParticleSystem effectInstance = Instantiate(cursorEffect, hit.point += new Vector3(0, 0.3f, 0), hit.collider.transform.rotation);
                         Destroy(effectInstance.gameObject, 2f);
                     }
                 }
             }
-        
+
 
             if (target != null)
             {
@@ -144,7 +143,7 @@ namespace Arena.Player
         }
 
         private void OnAnimatorMove()
-        {   
+        {
             Vector3 position = agent.nextPosition;
             animator.rootPosition = agent.nextPosition;
             transform.position = position;
@@ -189,10 +188,10 @@ namespace Arena.Player
                 {
                     SetTarget(hitCollider.transform);
                     picker.target = hitCollider.transform;
-                    damagable.TakeDamage(10,null);
+                    damagable.TakeDamage(10, null);
                 }
             }
-    
+
         }
         void SetTarget(Transform newTarget)
         {
@@ -213,26 +212,13 @@ namespace Arena.Player
 
         void AttackTarget()
         {
+            animator.SetBool(moveHash, false);
+            CurrentAttackBehaviour.animationIndex = Random.Range(0, 3);
             animator.SetInteger(attackIndexHash, CurrentAttackBehaviour.animationIndex);
             animator.SetTrigger(attackTriggerHash);
-            CurrentAttackBehaviour.animationIndex = Random.Range(0, 3);
-            if (CurrentAttackBehaviour == null)
-            {
-                return;
-            }
 
-            if (target != null && !IsInAttackState && CurrentAttackBehaviour.IsAvailable)
-            {
-                float distance = Vector3.Distance(transform.position, target.transform.position);
-                if (distance <= CurrentAttackBehaviour?.range)
-                {
-             
-                
-
-                }
-            }
         }
-       
+
         void FaceToTarget()
         {
             if (target)
@@ -271,6 +257,7 @@ namespace Arena.Player
 
         public void TakeDamage(int damage, GameObject damageEffectPrefab)
         {
+            Debug.Log("PlayerHit" + health);
             if (!IsAlive)
             {
                 return;

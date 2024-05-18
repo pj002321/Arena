@@ -45,6 +45,7 @@ public class AttackStateController : MonoBehaviour
 
     public void OnCheckAttackCollider(int attackIndex)
     {
+        Debug.Log("Chjecking?");
         GetComponent<IAttackable>()?.OnExecuteAttack(attackIndex);
     }
 }
