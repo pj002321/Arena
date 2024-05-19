@@ -1,10 +1,11 @@
 using Arena.AI;
 using Arena.Core;
+using Arena.UI;
 using Arena.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.Sprites;
+
 
 
 namespace Arena.Characters
@@ -19,6 +20,8 @@ namespace Arena.Characters
 
         public override float AttackRange => CurrentAttackBehaviour?.range ?? 6.0f;
 
+        [SerializeField]
+        private NPCBattleUI battleUI;
 
         public float maxHealth => 100f;
         private float health;
@@ -27,14 +30,16 @@ namespace Arena.Characters
 
         [SerializeField]
         private Transform projectilePoint;
+
         #endregion Variables
 
         #region Proeprties
         public override bool IsAvailableAttack
         {
-            get {
-
-                if (!Target) {
+            get
+            {
+                if (!Target)
+                {
                     return false;
                 }
                 float distance = Vector3.Distance(transform.position, Target.position);
@@ -50,7 +55,7 @@ namespace Arena.Characters
         protected override void Start()
         {
             base.Start();
-          
+
             stateMachine.AddState(new MoveState());
             stateMachine.AddState(new MoveToWayPoint());
             stateMachine.AddState(new AttackState());
@@ -58,6 +63,13 @@ namespace Arena.Characters
             stateMachine.AddState(new IdleState());
 
             health = maxHealth;
+
+            if (battleUI)
+            {
+                battleUI.MinimumValue = 0.0f;
+                battleUI.MaximumValue = maxHealth;
+                battleUI.Value = health;
+            }
 
             InitAttackBehaviour();
         }
@@ -79,10 +91,12 @@ namespace Arena.Characters
         #endregion Unity Methods
 
         #region Helper Methods
-        private void InitAttackBehaviour() {
-            
-            foreach (AttackBehaviour behaviour in attackBehaviours) {
-                if (CurrentAttackBehaviour == null) {
+        private void InitAttackBehaviour()
+        {
+            foreach (AttackBehaviour behaviour in attackBehaviours)
+            {
+                if (CurrentAttackBehaviour == null)
+                {
                     CurrentAttackBehaviour = behaviour;
                 }
 
@@ -92,13 +106,17 @@ namespace Arena.Characters
 
         private void CheckAttackBehaviour()
         {
-            if (CurrentAttackBehaviour == null || !CurrentAttackBehaviour.IsAvailable) {
+            if (CurrentAttackBehaviour == null || !CurrentAttackBehaviour.IsAvailable)
+            {
                 CurrentAttackBehaviour = null;
 
-                foreach (AttackBehaviour behaviour in attackBehaviours) {
-                    if (behaviour.IsAvailable) {
-                        if ((CurrentAttackBehaviour == null) || (CurrentAttackBehaviour.priority < behaviour.priority)) {
-                           
+                foreach (AttackBehaviour behaviour in attackBehaviours)
+                {
+                    if (behaviour.IsAvailable)
+                    {
+                        if ((CurrentAttackBehaviour == null) || (CurrentAttackBehaviour.priority < behaviour.priority))
+                        {
+
                             CurrentAttackBehaviour = behaviour;
                         }
                     }
@@ -114,22 +132,38 @@ namespace Arena.Characters
 
         public void TakeDamage(int damage, GameObject hitEffectPrefab)
         {
-            Debug.Log("Hit Damage!" + health);
 
-            if (!IsAlive) {
+            if (!IsAlive)
+            {
                 return;
             }
 
             health -= damage;
 
-            if (hitEffectPrefab) {
+            Debug.Log("Hit Damage!" + health);
+            Debug.Log(battleUI.Value);
+
+            if (battleUI)
+            {
+                battleUI.Value = health;
+                battleUI.TakeDamage(damage);
+            }
+
+            if (hitEffectPrefab)
+            {
                 Instantiate(hitEffectPrefab, hitPoint);
             }
 
-            if (IsAlive) {
+            if (IsAlive)
+            {
                 animator?.SetTrigger(hitTriggerHash);
             }
-            else {
+            else
+            {
+                if(battleUI!=null)
+                {
+                    battleUI.enabled = false;
+                }
                 stateMachine.ChangeState<DeadState>();
             }
         }
@@ -137,7 +171,6 @@ namespace Arena.Characters
         #endregion IDamagable interfaces
 
         #region IAttackable Interfaces
-
 
         [SerializeField]
         private List<AttackBehaviour> attackBehaviours = new List<AttackBehaviour>();
@@ -147,14 +180,14 @@ namespace Arena.Characters
             get;
             private set;
         }
-
         public void OnExecuteAttack(int attackIndex)
         {
-            if (CurrentAttackBehaviour != null && Target != null) {
+            if (CurrentAttackBehaviour != null && Target != null)
+            {
                 CurrentAttackBehaviour.ExecuteAttack(Target.gameObject);
             }
         }
-        
+
         #endregion IAttackable Interfaces
     }
 }

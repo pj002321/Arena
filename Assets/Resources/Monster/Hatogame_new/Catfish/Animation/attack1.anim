@@ -120372,9 +120372,16 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.4
-    functionName: TrailInit
+    functionName: Attack001
     data: 
-    objectReferenceParameter: {fileID: 6779729399497110097, guid: c0d4b0d80a49f3e4f982fef4819eb5ef, type: 3}
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.5
+    functionName: 
+    data: 
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

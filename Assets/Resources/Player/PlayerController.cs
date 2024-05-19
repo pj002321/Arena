@@ -17,7 +17,7 @@ namespace Arena.Player
         private CharacterController controller;
         [SerializeField]
         private LayerMask groundLayerMask;
-
+        public ManualCollision attackCollision;
         private NavMeshAgent agent;
         private Camera camera;
         public ParticleSystem cursorEffect;
@@ -81,7 +81,7 @@ namespace Arena.Player
             //calcAttackCoolTime += Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                controller.Move(Vector3.zero);
+                agent.velocity=Vector3.zero;
                 AttackTarget();
                 RemoveTarget();
             }
@@ -177,7 +177,24 @@ namespace Arena.Player
                 }
             }
         }
+        #region AttackMotion
         void AttacktoDamageCheck()
+        {
+            Collider[] colliders = attackCollision?.CheckOverlapBox(targetMask);
+
+            foreach (var hitCollider in colliders)
+            {
+                IDamagable damagable = hitCollider.GetComponent<IDamagable>();
+                if (damagable != null && damagable.IsAlive)
+                {
+                    SetTarget(hitCollider.transform);
+                    picker.target = hitCollider.transform;
+                    int damage = Random.Range(5, 10);
+                    damagable.TakeDamage(damage, null);
+                }
+            }
+        }
+        void AreaAttacktoDamageCheck()
         {
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, 15, targetMask);
 
@@ -186,13 +203,14 @@ namespace Arena.Player
                 IDamagable damagable = hitCollider.GetComponent<IDamagable>();
                 if (damagable != null && damagable.IsAlive)
                 {
-                    SetTarget(hitCollider.transform);
-                    picker.target = hitCollider.transform;
-                    damagable.TakeDamage(10, null);
+
+                    int damage = Random.Range(10, 25);
+                    damagable.TakeDamage(damage, null);
                 }
             }
-
         }
+
+        #endregion AttackMotion
         void SetTarget(Transform newTarget)
         {
             target = newTarget;
@@ -243,10 +261,9 @@ namespace Arena.Player
 
         public void OnExecuteAttack(int attackIndex)
         {
-            if (CurrentAttackBehaviour != null)
-            {
-                CurrentAttackBehaviour.ExecuteAttack(target.gameObject);
-            }
+
+            CurrentAttackBehaviour.ExecuteAttack();
+
         }
 
         #endregion IAttackable Interfaces
