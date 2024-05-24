@@ -14,7 +14,6 @@ public class MeleeAttack_Behaviour : AttackBehaviour
 
         foreach (Collider col in colliders)
         {
-            Debug.Log(col.gameObject);
             col.gameObject.GetComponent<IDamagable>()?.TakeDamage(damage, effectPrefab);
         }
 

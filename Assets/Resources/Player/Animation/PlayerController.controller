@@ -200,7 +200,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Ability
-  m_Speed: 2.5
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3850887277517868710}
@@ -376,7 +376,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Stun
-  m_Speed: 2.5
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -8216254731383116207}
@@ -390,7 +390,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 9410c93cb0c54f749b49d39448661682, type: 2}
+  m_Motion: {fileID: 7400000, guid: a28c08196fc9c0c4584679137d864326, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -453,7 +453,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 5139763762663163172, guid: c745ea50a20486f4a976bc20032453eb, type: 3}
+  m_Motion: {fileID: 7721311455055960355, guid: 2f90c21b030ce08488367c362232c454, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

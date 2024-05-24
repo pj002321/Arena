@@ -140,9 +140,6 @@ namespace Arena.Characters
 
             health -= damage;
 
-            Debug.Log("Hit Damage!" + health);
-            Debug.Log(battleUI.Value);
-
             if (battleUI)
             {
                 battleUI.Value = health;
