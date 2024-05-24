@@ -13,7 +13,7 @@ namespace Arena.InvenSystem
     public class Inventory
     {
         #region Variables
-        public Inventory_Slot[] slots = new Inventory_Slot[24];
+        public Inventory_Slot[] slots = new Inventory_Slot[30];
         #endregion Variables
 
         #region Methods

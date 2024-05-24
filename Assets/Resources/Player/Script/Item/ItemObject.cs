@@ -16,7 +16,9 @@ namespace Arena.InvenSystem.item
         Gloves=5,
         LeftWeapon=6,
         RightWeapon=7,
-        Food,
+        Postion=8,
+        Ring=9,
+        Sheild=10,
         Default
     }
 

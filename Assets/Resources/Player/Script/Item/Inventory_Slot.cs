@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Arena.InvenSystem.item;
 using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
+
 
 namespace Arena.InvenSystem
 {
@@ -27,6 +27,7 @@ namespace Arena.InvenSystem
         public Item item;
         public int amount;
         #endregion Variables
+
         #region Properties
         public ItemObject itemObject
         {
@@ -36,6 +37,7 @@ namespace Arena.InvenSystem
             }
         }
         #endregion Properties
+
         public Inventory_Slot() => UpdateSlot(new Item(), 0);
         public Inventory_Slot(Item item,int amount)=>UpdateSlot(item, amount);
 
@@ -53,9 +55,7 @@ namespace Arena.InvenSystem
             OnPreUpdate?.Invoke(this);
             this.item = item;
             this.amount = amount;
-
             OnPostUpdate?.Invoke(this);
-
         }
 
         public bool CanPlaceInSlot(ItemObject itemObject)

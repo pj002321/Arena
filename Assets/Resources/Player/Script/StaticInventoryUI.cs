@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 namespace Arena.InvenSystem
 {
-
     public class StaticInventoryUI : InventoryUI
     {
         public GameObject[] staticSlots = null;
@@ -27,7 +26,6 @@ namespace Arena.InvenSystem
                 inventoryObject.Slots[i].slotUI = go;
                 slotUIs.Add(go, inventoryObject.Slots[i]);
 
-                go.name = ": " + i;
             }
         }
     }

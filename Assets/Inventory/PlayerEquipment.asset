@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f4107de6a57fd4eae3461853d2555e, type: 3}
+  m_Name: PlayerEquipment
+  m_EditorClassIdentifier: 
+  database: {fileID: 11400000, guid: dbbb63d3a7374774a8bdf23a7fafa7fb, type: 2}
+  type: 1
+  container:
+    slots:
+    - allowedItems: 00000000
+      item:
+        id: 3
+        name: Helmets
+        buffs: []
+      amount: 1
+    - allowedItems: 01000000
+      item:
+        id: 1
+        name: chest
+        buffs: []
+      amount: 1
+    - allowedItems: 02000000
+      item:
+        id: 4
+        name: Pants
+        buffs: []
+      amount: 1
+    - allowedItems: 03000000
+      item:
+        id: 0
+        name: Bootss
+        buffs: []
+      amount: 1
+    - allowedItems: 04000000
+      item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+    - allowedItems: 05000000
+      item:
+        id: 2
+        name: Gloves
+        buffs: []
+      amount: 1
+    - allowedItems: 06000000
+      item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+    - allowedItems: 07000000
+      item:
+        id: 7
+        name: Sword
+        buffs: []
+      amount: 1
+    - allowedItems: 08000000
+      item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+    - allowedItems: 09000000
+      item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+    - allowedItems: 09000000
+      item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+    - allowedItems: 09000000
+      item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+    - allowedItems: 09000000
+      item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0
+    - allowedItems: 06000000
+      item:
+        id: -1
+        name: 
+        buffs: []
+      amount: 0

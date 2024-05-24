@@ -21,9 +21,9 @@ public class TestItem : MonoBehaviour
         }
     }
 
-    //public void ClearInventory()
-    //{
-    //    equipObject?.Clear();
-    //    invenObject?.Clear();
-    //}
+    public void ClearInventory()
+    {
+        equipObject?.Clear();
+        invenObject?.Clear();
+    }
 }

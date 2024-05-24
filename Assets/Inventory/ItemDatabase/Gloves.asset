@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c52a7df5cd478b64b92bd7d4744a99ab, type: 3}
   m_Name: Gloves
   m_EditorClassIdentifier: 
-  type: 0
+  type: 5
   stackable: 0
   icon: {fileID: 21300000, guid: ff5e9b2aed35e7d4aa46f870e6951682, type: 3}
   modelPrefab: {fileID: 100000, guid: 42d0411c3d9416340ab8bbb090e9eb0e, type: 3}

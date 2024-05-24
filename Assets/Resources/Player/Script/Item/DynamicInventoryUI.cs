@@ -38,6 +38,7 @@ namespace Arena.InvenSystem
                 AddEvent(go, EventTriggerType.BeginDrag, delegate { OnStartDrag(go); });
                 AddEvent(go, EventTriggerType.EndDrag, delegate { OnEndDrag(go); });
                 AddEvent(go, EventTriggerType.Drag, delegate { OnDrag(go); });
+                AddEvent(go, EventTriggerType.PointerClick, (data) => { OnClick(go, (PointerEventData)data); });
 
                 inventoryObject.Slots[i].slotUI = go;
                 slotUIs.Add(go, inventoryObject.Slots[i]);

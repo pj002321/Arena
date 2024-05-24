@@ -107,7 +107,7 @@ namespace Arena.InvenSystem
             GameObject dragImageGo = new GameObject();
 
             RectTransform rectTransform = dragImageGo.AddComponent<RectTransform>();
-            rectTransform.sizeDelta = new Vector2(50, 50);
+            rectTransform.sizeDelta = new Vector2(10, 10);
             dragImageGo.transform.SetParent(transform.parent);
             Image image = dragImageGo.AddComponent<Image>();
             image.sprite = slotUIs[go].itemObject.icon;
@@ -138,6 +138,32 @@ namespace Arena.InvenSystem
                 Inventory_Slot mouseHoverSlotData = MouseData.interfaceMouseIsOver.slotUIs[MouseData.slotHoveredOver];
                 inventoryObject.SwapItems(slotUIs[go], mouseHoverSlotData);
             }
+        }
+
+        public void OnClick(GameObject go, PointerEventData data)
+        {
+            Inventory_Slot slot = slotUIs[go];
+            if (slot == null)
+            {
+                return;
+            }
+
+            if (data.button == PointerEventData.InputButton.Left)
+            {
+                OnLeftClick(slot);
+            }
+            else if (data.button == PointerEventData.InputButton.Right)
+            {
+                OnRightClick(slot);
+            }
+        }
+
+        protected virtual void OnRightClick(Inventory_Slot slot)
+        {
+        }
+
+        protected virtual void OnLeftClick(Inventory_Slot slot)
+        {
         }
     }
 }

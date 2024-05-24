@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8899262574006695973}
   - component: {fileID: 1461651254744636730}
   - component: {fileID: 1130635238981520065}
+  - component: {fileID: 4312599744260982250}
   m_Layer: 0
   m_Name: SlotPrefab
   m_TagString: Untagged
@@ -31,8 +32,8 @@ RectTransform:
   m_LocalScale: {x: 0.14903699, y: 0.14196932, z: 0.14196932}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3086348703664526196}
   - {fileID: 7339994033221280845}
+  - {fileID: 3086348703664526196}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -47,7 +48,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3560990135398111958}
-  m_CullTransparentMesh: 1
+  m_CullTransparentMesh: 0
 --- !u!114 &1461651254744636730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,7 +71,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -1030394614, guid: caaed32e05bfe1149a42737ca26d86b8, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -105,7 +106,7 @@ MonoBehaviour:
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.03
+    m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -122,6 +123,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4312599744260982250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3560990135398111958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
 --- !u!1 &5946957008096995037
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,7 +201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1018592376, guid: 93c7caaac6ae5db4db3ad0963593dbcb, type: 3}
+  m_Sprite: {fileID: -275519928, guid: 93c7caaac6ae5db4db3ad0963593dbcb, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

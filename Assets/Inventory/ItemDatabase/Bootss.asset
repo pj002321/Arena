@@ -12,17 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c52a7df5cd478b64b92bd7d4744a99ab, type: 3}
   m_Name: Bootss
   m_EditorClassIdentifier: 
-  type: 0
+  type: 3
   stackable: 0
-  icon: {fileID: 21300000, guid: cb1ee3b1508ca434e8a617b218904177, type: 3}
-  modelPrefab: {fileID: 100086, guid: 0c4b8cfcf6dea794bb663047dcfb0a66, type: 3}
+  icon: {fileID: 21300000, guid: 93c6087f8416ac944877a92728e43fcf, type: 3}
+  modelPrefab: {fileID: 100084, guid: 0b7847a9504a3314b95e9c3d6fef59dc, type: 3}
   data:
     id: 0
     name: 
-    buffs:
-    - {fileID: 0}
+    buffs: []
   boneNames:
-  - Guardian-Bip001 Head
-  - Guardian-Bip001 Spine1
-  - Guardian-Bip001 Neck
+  - Guardian-Bip001 L Calf
+  - Guardian-Bip001 L Thigh
+  - Guardian-Bip001 L Foot
+  - Guardian-Bip001 L Toe0
+  - Guardian-Bip001 R Thigh
+  - Guardian-Bip001 R Calf
+  - Guardian-Bip001 R Foot
+  - Guardian-Bip001 R Toe0
   description: 

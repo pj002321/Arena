@@ -61,7 +61,11 @@ namespace Arena.InvenSystem
 
             return true;
         }
-     
+        [ContextMenu("Clear")]
+        public void Clear()
+        {
+            container.Clear();
+        }
         public Inventory_Slot FindItemInInventory(Item item)
         {
             return Slots.FirstOrDefault(i => i.item.id == item.id);
