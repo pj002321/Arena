@@ -107,7 +107,7 @@ namespace Arena.InvenSystem
             GameObject dragImageGo = new GameObject();
 
             RectTransform rectTransform = dragImageGo.AddComponent<RectTransform>();
-            rectTransform.sizeDelta = new Vector2(10, 10);
+            rectTransform.sizeDelta = new Vector2(25, 25);
             dragImageGo.transform.SetParent(transform.parent);
             Image image = dragImageGo.AddComponent<Image>();
             image.sprite = slotUIs[go].itemObject.icon;

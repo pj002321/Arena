@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39f4107de6a57fd4eae3461853d2555e, type: 3}
   m_Name: PlayerEquipment
   m_EditorClassIdentifier: 
-  database: {fileID: 11400000, guid: dbbb63d3a7374774a8bdf23a7fafa7fb, type: 2}
+  database: {fileID: 11400000, guid: 66b4cfb4f80b25a4e8e906fa6700243c, type: 2}
   type: 1
   container:
     slots:
@@ -36,10 +36,10 @@ MonoBehaviour:
       amount: 1
     - allowedItems: 03000000
       item:
-        id: 0
-        name: Bootss
+        id: -1
+        name: 
         buffs: []
-      amount: 1
+      amount: 0
     - allowedItems: 04000000
       item:
         id: -1

@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-guid: 1fd724d226066ad4cbc105d4ad53a444
+guid: f7449461414d99a44a8a84843c836452
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 2100000
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 141496
-  packageName: Procedural fire
-  packageVersion: 1.1.0
-  assetPath: Assets/Hovl Studio/Procedural fire/Materials/Smoke26.mat
-  uploadId: 454218
