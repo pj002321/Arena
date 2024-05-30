@@ -14,12 +14,14 @@ namespace Arena.EffectSystem
         public Transform TrailShort;
         public AudioClip[] Audioclips;
         public AudioSource AudioSources;
+        public bool beingSkill = false;
         #endregion Variables
         ParticleSystem effectInstance;
         ParticleSystem subeffectInstance;
         private void Start()
         {
             AudioSources = GetComponent<AudioSource>();
+           
         }
         private void Update()
         {
@@ -36,6 +38,7 @@ namespace Arena.EffectSystem
         // Update is called once per frame
         void longTrailInit()
         {
+          
             if (TrailEffect001 != null)
             {
                 effectInstance = Instantiate(TrailEffect001, Trail.transform.position, Trail.rotation);
@@ -61,6 +64,16 @@ namespace Arena.EffectSystem
                 Destroy(effectInstance.gameObject, 1f);
             }
         }
+        void ResetBeingSkill()
+        {
+            beingSkill = false;
+            Debug.Log(beingSkill);
+        }
+        void startBeingSkill()
+        {
+            beingSkill = true;
+            Debug.Log(beingSkill);
+        }
     }
-
+    
 }

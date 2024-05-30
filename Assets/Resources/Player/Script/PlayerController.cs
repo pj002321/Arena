@@ -2,6 +2,7 @@ using Arena.AI;
 using Arena.Characters;
 using Arena.Core;
 using Arena.UI;
+using Arena.EffectSystem;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -24,7 +25,7 @@ namespace Arena.Player
         private Camera camera;
         public ParticleSystem cursorEffect;
         public ParticleSystem TrailEffect;
-
+        private Slash attackEvent;
         [SerializeField]
         private Animator animator;
 
@@ -49,6 +50,7 @@ namespace Arena.Player
         public Transform Trail;
 
         public bool IsInAttackState => GetComponent<AttackStateController>()?.IsInAttackState ?? false;
+        public bool IsBeingSkill => GetComponent<Slash>()?.beingSkill ?? false;
 
         [SerializeField]
         private Transform hitPoint;
@@ -66,7 +68,7 @@ namespace Arena.Player
             agent.updateRotation = true;
 
             camera = Camera.main;
-
+        
             health = maxHealth;
             if (battleUI)
             {
@@ -84,15 +86,16 @@ namespace Arena.Player
             {
                 return;
             }
-
+         
             CheckAttackBehaviour();
 
             //calcAttackCoolTime += Time.deltaTime;
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                agent.velocity=Vector3.zero;
+                agent.velocity = Vector3.zero;
                 AttackTarget();
                 RemoveTarget();
+                
             }
             // Process mouse left button input
             if (Input.GetMouseButtonDown(1) /*&& !IsInAttackState*/)
@@ -278,37 +281,40 @@ namespace Arena.Player
         #region IDamagable Interfaces
 
         public bool IsAlive => health > 0;
-     
+
         public void TakeDamage(int damage, GameObject damageEffectPrefab)
         {
-            Debug.Log("PlayerHit" + health);
+
             if (!IsAlive)
             {
                 return;
             }
-
-            health -= damage;
-            if (battleUI)
+            
+            if (!IsBeingSkill)
             {
-                battleUI.Value = health;
-                battleUI.TakeDamage(damage);
-            }
-            if (damageEffectPrefab)
-            {
-                Instantiate<GameObject>(damageEffectPrefab, hitPoint);
-            }
-
-            if (IsAlive)
-            {
-                animator?.SetTrigger(hitTriggerHash);
-            }
-            else
-            {
-                if (battleUI != null)
+                health -= damage;
+                if (battleUI)
                 {
-                    battleUI.enabled = false;
+                    battleUI.Value = health;
+                    battleUI.TakeDamage(damage);
                 }
-                animator?.SetBool(isAliveHash, false);
+                if (damageEffectPrefab)
+                {
+                    Instantiate<GameObject>(damageEffectPrefab, hitPoint);
+                }
+
+                if (IsAlive)
+                {
+                    animator?.SetTrigger(hitTriggerHash);
+                }
+                else
+                {
+                    if (battleUI != null)
+                    {
+                        battleUI.enabled = false;
+                    }
+                    animator?.SetBool(isAliveHash, false);
+                }
             }
         }
 
