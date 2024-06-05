@@ -200,7 +200,7 @@ namespace Arena.Player
                 if (damagable != null && damagable.IsAlive)
                 {
                     SetTarget(hitCollider.transform);
-                    picker.target = hitCollider.transform;
+                   
                     int damage = Random.Range(5, 10);
                     damagable.TakeDamage(damage, null);
                 }

@@ -30,10 +30,10 @@ MonoBehaviour:
       amount: 1
     - allowedItems: 02000000
       item:
-        id: 4
-        name: Pants
+        id: -1
+        name: 
         buffs: []
-      amount: 1
+      amount: 0
     - allowedItems: 03000000
       item:
         id: -1
@@ -48,10 +48,10 @@ MonoBehaviour:
       amount: 0
     - allowedItems: 05000000
       item:
-        id: 2
-        name: Gloves
+        id: -1
+        name: 
         buffs: []
-      amount: 1
+      amount: 0
     - allowedItems: 06000000
       item:
         id: -1
@@ -61,7 +61,7 @@ MonoBehaviour:
     - allowedItems: 07000000
       item:
         id: 7
-        name: Sword
+        name: LeftWeapon
         buffs: []
       amount: 1
     - allowedItems: 08000000
@@ -76,27 +76,27 @@ MonoBehaviour:
         name: 
         buffs: []
       amount: 0
-    - allowedItems: 09000000
+    - allowedItems: 0a000000
       item:
         id: -1
         name: 
         buffs: []
       amount: 0
-    - allowedItems: 09000000
+    - allowedItems: 08000000
       item:
-        id: -1
-        name: 
+        id: 10
+        name: PotionRed
         buffs: []
-      amount: 0
-    - allowedItems: 09000000
+      amount: 1
+    - allowedItems: 08000000
       item:
-        id: -1
-        name: 
+        id: 13
+        name: PotionBlue
         buffs: []
-      amount: 0
-    - allowedItems: 06000000
+      amount: 4
+    - allowedItems: 08000000
       item:
-        id: -1
-        name: 
+        id: 13
+        name: PotionBlue
         buffs: []
-      amount: 0
+      amount: 2
