@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "539891783238",
+    "project_id": "arenadev-b1130",
+    "storage_bucket": "arenadev-b1130.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539891783238:android:22e2e3095c3aff36239c47",
+        "android_client_info": {
+          "package_name": "com.Arena.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN5l_vw3ohYWlEZdTwZZQ6kQH9rr25TMc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
